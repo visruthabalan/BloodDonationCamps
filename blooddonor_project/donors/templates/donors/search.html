@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Donors</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background: #b30000;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-top: 12px;
+            color: #444;
+        }
+
+        form input, form select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #b30000;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #800000;
+        }
+
+        h2 {
+            margin-top: 30px;
+            text-align: center;
+            color: #b30000;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        li span {
+            font-weight: bold;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #222;
+            color: #fff;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔍 Search Donors</h1>
+        <nav>
+            <a href="{% url 'index' %}">Home</a>
+            <a href="{% url 'donor_register' %}">Register as Donor</a>
+        </nav>
+    </header>
+
+    <main>
+        <form method="POST" onsubmit="return validateSearch()">
+            {% csrf_token %}
+            <label>Blood Group:</label>
+            <select name="blood_group" required>
+                <option value="">-- Select Blood Group --</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+            </select>
+
+            <label>City:</label>
+            <input type="text" name="city" placeholder="Enter city">
+
+            <button type="submit">🔍 Search</button>
+        </form>
+
+        <h2>Results:</h2>
+        <ul>
+            {% for donor in donors %}
+                <li>
+                    <span>{{ donor.name }}</span> ({{ donor.blood_group }})  
+                    - {{ donor.city }}  
+                    - Phone: {{ donor.phone }}
+                </li>
+            {% empty %}
+                <li>No donors found.</li>
+            {% endfor %}
+        </ul>
+    </main>
+
+    <footer>
+        <p>© 2025 Blood Donor Tracking App</p>
+    </footer>
+
+    <script>
+        // JS Validation for search form
+        function validateSearch() {
+            let bloodGroup = document.querySelector("select[name='blood_group']").value;
+            if (!bloodGroup) {
+                alert("⚠️ Please select a blood group before searching.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
