@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blood Donor App</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+        header {
+            background: #b30000;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 10px;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        nav a:hover { text-decoration: underline; }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: #ffe6e6;
+            border-radius: 10px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 24px;
+            background: #b30000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #800000; }
+        footer {
+            background: #222;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🩸 Blood Donor Tracking App</h1>
+        <nav>
+            {% if user.is_authenticated %}
+                <a href="{% url 'donor_register' %}" class="btn">Register as Donor</a>
+                <a href="{% url 'search_donors' %}" class="btn">Search Donors</a>
+                <a href="{% url 'donor_list' %}" class="btn">View All Donors</a>
+                <a href="{% url 'logout' %}" class="btn">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn">Login</a>
+                <a href="{% url 'register' %}" class="btn">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2 id="hero-title"></h2>
+            <p id="hero-text" style="opacity: 0;">
+                Life of some patients is resting on a fraction of hope in request of your gift of love
+            </p>
+            <a href="{% url 'donor_register' %}" id="hero-btn" class="btn" style="opacity: 0;">Register Now</a>
+        </section>
+    </main>
+
+    <script>
+        const text = "Blood Owners should be Blood Donors";
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById("hero-title").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 80);
+            } else {
+                fadeIn(document.getElementById("hero-text"), 1000);
+                fadeIn(document.getElementById("hero-btn"), 1500);
+            }
+        }
+
+        function fadeIn(element, delay) {
+            setTimeout(() => {
+                element.style.transition = "opacity 1.5s ease-in-out";
+                element.style.opacity = 1;
+            }, delay);
+        }
+
+        window.onload = typeWriter;
+    </script>
+
+    <footer>
+        <p>© 2025 Blood Donor Tracking App</p>
+    </footer>
+</body>
+</html>
